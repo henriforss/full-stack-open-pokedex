@@ -11,7 +11,7 @@ on:
         [opened, synchronize]
 
 jobs:
-  test_pipeline:
+  simple_deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -31,10 +31,7 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
-  
-  deployment_pipeline:
-    runs-on: ubuntu-20.04
-    steps:
+        if: ${{ github.event_name == 'push' }}
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Fly deploy
         run: flyctl deploy --remote-only
