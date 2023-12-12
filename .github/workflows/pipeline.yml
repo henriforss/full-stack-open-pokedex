@@ -33,13 +33,13 @@ jobs:
       #     browser: chrome
       - name: commit messages
         env:
-          COMMIT_MESSAGES: ${{ toJson(github.event) }}
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -51,7 +51,7 @@ jobs:
   tag_release:
     needs: deploy_pipeline
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     steps:
       - uses: actions/checkout@v3
       - name: Bump version and push tag
