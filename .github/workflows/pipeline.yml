@@ -31,7 +31,12 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
-        if: ${{ github.event_name == 'push' }}
+
+  deploy_pipeline:
+    runs-on: ubuntu-20.04
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Fly deploy
         run: flyctl deploy --remote-only
