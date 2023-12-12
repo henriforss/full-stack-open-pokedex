@@ -26,7 +26,7 @@ jobs:
         if: ${{ contains(join(github.event.commits.*.message), '#skip') }}
         run: exit 0
       - name: not containing "#skip"
-        run: commit did not contain "#skip"
+        run: echo "commit did not contain '#skip'"
 
 
 
