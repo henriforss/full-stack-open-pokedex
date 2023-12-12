@@ -15,31 +15,31 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: "16"
-      # - name: Install deps
-      #   run: npm install
-      # - name: Check style
-      #   run: npm run eslint
-      # - name: Build project
-      #   run: npm run build
-      # - name: Test project
-      #   run: npm test
-      # - name: e2e tests
-      #   uses: cypress-io/github-action@v5
-      #   with:
-      #     start: npm run start-prod
-      #     browser: chrome
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install deps
+        run: npm install
+      - name: Check style
+        run: npm run eslint
+      - name: Build project
+        run: npm run build
+      - name: Test project
+        run: npm test
+      - name: e2e tests
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run start-prod
+          browser: chrome
       - name: commit messages
         env:
-          COMMIT_MESSAGES: ${{ toJson(github.event) }}
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -51,7 +51,7 @@ jobs:
   tag_release:
     needs: deploy_pipeline
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     steps:
       - uses: actions/checkout@v3
       - name: Bump version and push tag
