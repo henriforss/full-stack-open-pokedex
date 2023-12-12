@@ -31,10 +31,6 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
-      - name: commit messages
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits) }}
-        run: echo "$COMMIT_MESSAGES"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
