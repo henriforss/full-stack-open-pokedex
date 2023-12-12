@@ -33,7 +33,7 @@ jobs:
           browser: chrome
       - name: commit messages
         env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits) }}
         run: echo "$COMMIT_MESSAGES"
 
   deploy_pipeline:
