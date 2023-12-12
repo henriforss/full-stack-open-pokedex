@@ -22,9 +22,11 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+      - name: skip if contains 
         if: ${{ contains(join(github.event.commits.*.message), '#skip') }}
-      - name: test
-        run: echo "moi"
+        run: exit 1
+      - name: does not contain
+        run: echo "DOES NOT CONTAIN"
 
 
 
