@@ -24,7 +24,7 @@ jobs:
         run: echo "$COMMIT_MESSAGES"
       - name: stop workflow if commit contains "#skip" 
         if: ${{ contains(join(github.event.commits.*.message), '#skip') }}
-        run: exit 0
+        run: exit 0 
       - name: not containing "#skip"
         run: echo "commit did not contain '#skip'!!"
 

@@ -31,9 +31,6 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
-      - name: end if commit contains '#skip'
-        if: ${{ !contains(join(github.event.commits.*.message), '#skip') }}
-        run: echo "CONTINUE TO DEPLOY AND TAG"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
