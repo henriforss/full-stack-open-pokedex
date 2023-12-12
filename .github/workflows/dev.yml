@@ -3,7 +3,7 @@ name: Testing stuff
 on:
   push:
     branches:
-      - devdevdev
+      - devdev
 
 jobs:
   a_test_job:
@@ -22,10 +22,11 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
-      - name: continue if does not contain 
-        if: ${{ !contains(join(github.event.commits.*.message), '#skip') }}
-        run: echo "DOES NOT CONTAIN"
-        
+      - name: stop workflow if commit contains "#skip" 
+        if: ${{ contains(join(github.event.commits.*.message), '#skip') }}
+        run: exit 0 
+      - name: not containing "#skip"
+        run: echo "commit did not contain '#skip'!!"
 
 
 
