@@ -24,7 +24,7 @@ jobs:
         run: echo "$COMMIT_MESSAGES"
       - name: continue if does not contain 
         if: ${{ !contains(join(github.event.commits.*.message), '#skip') }}
-        run: echo "DOES NOT CONTAIN!!"
+        run: echo "DOES NOT CONTAIN"
         
 
 
