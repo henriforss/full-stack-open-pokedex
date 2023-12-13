@@ -1,10 +1,10 @@
 name: Health check
 
 on:
-#  push:
-#    branches: [dev]
-  schedule:
-    - cron: '0,5,10,15,20,25,30,35,40,45,50,55 * * * *'
+  push:
+    branches: [devdev] # change to "dev" for working version 
+#  schedule:
+#    - cron: '20 4 * * 0-6' # uncomment this to activate schedule
 
 jobs:
   health_check:
