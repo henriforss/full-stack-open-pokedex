@@ -31,6 +31,10 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
+      - name: Show github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
