@@ -31,10 +31,6 @@ jobs:
         with:
           start: npm run start-prod
           browser: chrome
-      - name: Show github context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
 
   deploy_pipeline:
     needs: simple_deployment_pipeline
@@ -68,9 +64,15 @@ jobs:
           text: A new version of Pokedex deployed
           description: To https://full-stack-open-flyio.fly.dev/ by user ${{ github.event.head_commit.author.username }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK}}
+
+
+  failure_botification:
+    needs: [simple_deployment_pipeline, deploy_pipeline, tag_release]
+    runs-on: ubuntu-20.04
+    if: failure()
+    steps:
       - name: Notify Discord if build fails
         uses: rjstone/discord-webhook-notify@v1
-        if: failure()
         with:
           severity: error
           text: Build failed
