@@ -2,7 +2,7 @@ name: Health check
 
 on:
   push:
-    branches: [dev]
+    branches: [devdev]
 
 jobs:
   health_check:
@@ -14,8 +14,35 @@ jobs:
           # Check the following URLs one by one sequentially
           url: https://full-stack-open-flyio.fly.dev/health
           # Follow redirects, or just report success on 3xx status codes
-          follow-redirect: false # Optional, defaults to "false"
+          # follow-redirect: false # Optional, defaults to "false"
           # Fail this action after this many failed attempts
-          max-attempts: 3 # Optional, defaults to 1
+          # max-attempts: 3 # Optional, defaults to 1
           # Delay between retries
-          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+          # retry-delay: 5s # Optional, only applicable to max-attempts > 1
+
+  success_notification:
+    needs: [health_check]
+    runs-on: ubuntu-20.04
+    if: success()
+    steps:
+      - name: Notify Discord if health check succeeds
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          text: Pokedex is healthy
+          description: All is well with https://full-stack-open-flyio.fly.dev/ 
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK}}
+
+          
+  failure_notification:
+    needs: [health_check]
+    runs-on: ubuntu-20.04
+    if: failure()
+    steps:
+      - name: Notify Discord if health check fails
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          text: Pokedex is not healthy
+          description: Something is wrong with https://full-stack-open-flyio.fly.dev/ 
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK}}
