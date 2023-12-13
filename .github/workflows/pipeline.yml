@@ -60,11 +60,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
           WITH_V: true
           DEFAULT_BUMP: patch
-      - name: Deploy success
+      - name: Notify Discord if deploy success
         uses: rjstone/discord-webhook-notify@v1
         if: success()
         with:
           severity: info
-          details: Deploy successful!
+          text: A new version of Pokedex deployed
+          description: To https://full-stack-open-flyio.fly.dev/
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK}}
 
