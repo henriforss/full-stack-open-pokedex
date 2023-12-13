@@ -3,7 +3,7 @@ name: Testing stuff
 on:
   push:
     branches:
-      - devdev
+      - devdev # change to "dev" for working version
 
 jobs:
   a_test_job:
